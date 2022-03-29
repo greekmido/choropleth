@@ -1,0 +1,9 @@
+body{
+    text-align: center;
+}
+.tooltip{
+    position: absolute;
+    background-color: aqua;
+    cursor: default;
+    opacity: 0;
+}

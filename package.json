@@ -1,0 +1,36 @@
+{
+  "name": "choropleth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "wp --config webpack.dev.js",
+    "build": "wp --config webpack.prod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greekmido/choropleth"
+  },
+  "author": "mohammad alameri",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/greekmido/choropleth/issues"
+  },
+  "homepage": "https://greekmido.github.io/choropleth/",
+  "devDependencies": {
+    "css-loader": "^6.6.0",
+    "html-loader": "^3.1.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.5.3",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.68.0",
+    "webpack-merge": "^5.8.0",
+    "webpack-nano": "^1.1.1",
+    "webpack-plugin-serve": "^1.6.0"
+  },
+  "dependencies": {
+    "d3": "^7.3.0",
+    "topojson": "^3.0.2"
+  }
+}
