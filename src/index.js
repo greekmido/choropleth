@@ -1,9 +1,8 @@
 import './index.css';
 import * as d3 from 'd3'
 import {feature,mesh} from 'topojson'
-import { interpolateReds } from 'd3';
 // defining variables to use 
-const margin = {"top":30,"bottom":30,"left":50,"right":50}
+
 const height = 600;
 const width = 950;
 const svg = d3.select("body").append("svg").attr("width",width).attr("height",height)
@@ -11,13 +10,18 @@ const svg = d3.select("body").append("svg").attr("width",width).attr("height",he
 
 Promise.all([d3.json("https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json"),
              d3.json("https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/for_user_education.json")])
-            .then((data)=>{onReady(data[0],data[1])}).catch((err)=>console.error(err))
+            .then((data)=>{onReady(data[0],data[1])}).catch((err)=>console.error(err));
 
 function onReady(data0,data1){
-
+                
     let counties = feature(data0,data0.objects.counties).features;
-    
-   
+                
+    const colrScale = d3.scaleSequential().domain([d3.min(data1,(d)=>d.bachelorsOrHigher-20),d3.max(data1,(d)=>d.bachelorsOrHigher)]).interpolator(d3.interpolateGreens)
+    const scaleAxis = d3.scaleLinear().domain([2.6, 75.1]).rangeRound([600, 860]);
+    const xAxis= d3.axisBottom(scaleAxis).tickSize(21).tickSizeOuter(0).tickFormat((d,i)=>`${d}%`);
+    svg.selectAll("rect").data(d3.range(2.6,75.1,1)).enter().append("rect")
+    .attr("fill",(d)=>colrScale(d)).attr("width","4").attr("height","20").attr("x",(d)=>scaleAxis(d));
+    svg.call(xAxis)
     //drawing the states borders 
       svg.append("path").datum(mesh(data0,data0.objects.states,(a,b)=>a!==b))
       .attr("fill","transparent")
@@ -41,13 +45,15 @@ function onReady(data0,data1){
      .attr("stroke-width","0.2")
      .attr("id",(d)=>{return `id${d.id}`})
      .on("mouseover",(e)=>{
-         console.log(e)
-         d3.select(".tooltip").style("left",()=>`${e.pageX-30}px`).style("top",()=>`${e.pageY-35}px`)
-         .html(`county:${data1.filter((el)=>"id"+el.fips==e.target.id)[0].area_name}`)
+         const targetE = data1.filter((el)=>"id"+el.fips==e.target.id)[0];
+         d3.select(".tooltip").style("left",()=>`${e.pageX-70}px`).style("top",()=>`${e.pageY-80}px`)
+         .html(`${targetE.area_name}  ${targetE.state}<br>bachelors or higher:<br><span>${targetE.bachelorsOrHigher}%</span>`)
          .transition().duration(210).style("opacity","0.9")
-     });
+     })
+     .on("mouseout",(e)=>{
+         d3.select(".tooltip").transition().duration(200).style("opacity","0")
+     })
       //coloring the map with the data
-      const colrScale = d3.scaleSequential().domain([d3.min(data1,(d)=>d.bachelorsOrHigher-20),d3.max(data1,(d)=>d.bachelorsOrHigher)]).interpolator(d3.interpolateGreens)
       data1.forEach(element => {
           d3.select(`#id${element.fips}`).attr("fill",()=>{
               return colrScale(element.bachelorsOrHigher)
@@ -56,7 +62,6 @@ function onReady(data0,data1){
 }
 
 
-//complete tooltip
 
 
 if(module.hot){

@@ -3,7 +3,16 @@ body{
 }
 .tooltip{
     position: absolute;
-    background-color: aqua;
+    background-color: rgb(144, 230, 158);
     cursor: default;
     opacity: 0;
+    border-radius: 5%;
+    border-style: groove;
+    border-color: rgb(9, 100, 1);
+    padding-left: 1%;
+    padding-right: 1%;
+}
+div span{
+    font-weight: bold;
+    background-color: chartreuse;
 }
